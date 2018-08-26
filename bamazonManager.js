@@ -88,16 +88,31 @@ function pickProduct() {
         {
           type: 'input',
           name: 'quantityToAdd',
-          message: 'How many units would you like to add to inventory?'
+          message: 'What would you like the total quantity to be in stock?'
         }
       ])
       .then(function(selected) {
-        console.log('you picked ' + selected.productToAdd);
-        console.log('you added ' + selected.quantityToAdd);
-        connection.end();
+        addToInventory(selected.productToAdd, parseInt(selected.quantityToAdd));
       });
   });
 }
 
-// add the desired product to inventory
-function addToInventory() {}
+// add the desired product and quantity to inventory
+function addToInventory(product, quantity) {
+  connection.query(
+    'update products set ? where ?',
+    [
+      {
+        stock_quantity: quantity
+      },
+      {
+        product_name: product
+      }
+    ],
+    function(err, res) {
+      if (err) throw err;
+      console.log('You added the product to inventory');
+      connection.end();
+    }
+  );
+}
