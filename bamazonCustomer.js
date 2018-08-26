@@ -46,7 +46,30 @@ function checkQuantity(id, quantity) {
         console.log('Insufficient quantity!');
       } else {
         console.log('Execute purchase order...');
+        executePurchaseOrder(
+          parseInt(id),
+          parseInt(quantity),
+          res[0].stock_quantity
+        );
       }
+    }
+  );
+}
+
+function executePurchaseOrder(id, purchaseQuantity, stockQuantity) {
+  connection.query(
+    'update products set ? where ?',
+    [
+      {
+        stock_quantity: stockQuantity - purchaseQuantity
+      },
+      {
+        item_id: id
+      }
+    ],
+    function(err, res) {
+      if (err) throw err;
+      console.log('Your order went through!');
       connection.end();
     }
   );
