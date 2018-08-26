@@ -1,6 +1,7 @@
 var mysql = require('mysql');
 var inquirer = require('inquirer');
 
+// setting DB connection details
 var connection = mysql.createConnection({
   host: 'localhost',
   port: 3306,
@@ -9,11 +10,13 @@ var connection = mysql.createConnection({
   database: 'bamazon'
 });
 
+// connecting to mySQL DB
 connection.connect(function(err) {
   if (err) throw err;
   readProducts();
 });
 
+// asking users what they would like to buy
 function promptUser() {
   inquirer
     .prompt([
@@ -34,6 +37,7 @@ function promptUser() {
     });
 }
 
+// check if there are enough quantity in stock for purchase to go through
 function checkQuantity(id, quantity) {
   connection.query(
     'SELECT stock_quantity FROM products where ?',
@@ -58,6 +62,7 @@ function checkQuantity(id, quantity) {
   );
 }
 
+// execute customer's purchase order
 function executePurchaseOrder(id, purchaseQuantity, stockQuantity) {
   connection.query(
     'update products set ? where ?',
@@ -78,6 +83,7 @@ function executePurchaseOrder(id, purchaseQuantity, stockQuantity) {
   );
 }
 
+// show customers their total purchase cost
 function showPurchaseCost(id, quantity) {
   connection.query(
     'select price from products where ?',
@@ -93,64 +99,7 @@ function showPurchaseCost(id, quantity) {
   );
 }
 
-// function createProduct() {
-//   console.log('Inserting a new product...\n');
-//   var query = connection.query(
-//     'INSERT INTO products SET ?',
-//     {
-//       flavor: 'Rocky Road',
-//       price: 3.0,
-//       quantity: 50
-//     },
-//     function(err, res) {
-//       console.log(res.affectedRows + ' product inserted!\n');
-//       // Call updateProduct AFTER the INSERT completes
-//       updateProduct();
-//     }
-//   );
-
-//   // logs the actual query being run
-//   console.log(query.sql);
-// }
-
-// function updateProduct() {
-//   console.log('Updating all Rocky Road quantities...\n');
-//   var query = connection.query(
-//     'UPDATE products SET ? WHERE ?',
-//     [
-//       {
-//         quantity: 100
-//       },
-//       {
-//         flavor: 'Rocky Road'
-//       }
-//     ],
-//     function(err, res) {
-//       console.log(res.affectedRows + ' products updated!\n');
-//       // Call deleteProduct AFTER the UPDATE completes
-//       deleteProduct();
-//     }
-//   );
-
-//   // logs the actual query being run
-//   console.log(query.sql);
-// }
-
-// function deleteProduct() {
-//   console.log('Deleting all strawberry icecream...\n');
-//   connection.query(
-//     'DELETE FROM products WHERE ?',
-//     {
-//       flavor: 'strawberry'
-//     },
-//     function(err, res) {
-//       console.log(res.affectedRows + ' products deleted!\n');
-//       // Call readProducts AFTER the DELETE completes
-//       readProducts();
-//     }
-//   );
-// }
-
+// displays the product catalogue
 function readProducts() {
   connection.query('SELECT * FROM products', function(err, res) {
     if (err) throw err;
