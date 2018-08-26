@@ -11,9 +11,7 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
   if (err) throw err;
-  console.log('connected as id ' + connection.threadId + '\n');
   readProducts();
-  connection.end();
 });
 
 function promptUser() {
@@ -31,9 +29,27 @@ function promptUser() {
       }
     ])
     .then(function(purchase) {
-      console.log('Item Id:', purchase.user_item_id);
-      console.log('Quantity:', purchase.user_item_quantity);
+      checkQuantity(purchase.user_item_id, purchase.user_item_quantity);
     });
+}
+
+function checkQuantity(id, quantity) {
+  connection.query(
+    'SELECT stock_quantity FROM products where ?',
+    {
+      item_id: parseInt(id)
+    },
+    function(err, res) {
+      if (err) throw err;
+
+      if (parseInt(quantity) > res[0].stock_quantity) {
+        console.log('Insufficient quantity!');
+      } else {
+        console.log('Execute purchase order...');
+      }
+      connection.end();
+    }
+  );
 }
 
 // function createProduct() {
@@ -95,10 +111,8 @@ function promptUser() {
 // }
 
 function readProducts() {
-  console.log('Selecting all products...\n');
   connection.query('SELECT * FROM products', function(err, res) {
     if (err) throw err;
-    // Log all results of the SELECT statement
     console.log(res);
     promptUser();
   });
