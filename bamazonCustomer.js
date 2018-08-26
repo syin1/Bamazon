@@ -29,6 +29,7 @@ function promptUser() {
       }
     ])
     .then(function(purchase) {
+      // Call checkQuantity AFTER getting purchase details from customer
       checkQuantity(purchase.user_item_id, purchase.user_item_quantity);
     });
 }
@@ -46,6 +47,7 @@ function checkQuantity(id, quantity) {
         console.log('Insufficient quantity!');
       } else {
         console.log('Execute purchase order...');
+        // Call executePurchaseOrder AFTER checking there's sufficient quantity
         executePurchaseOrder(
           parseInt(id),
           parseInt(quantity),
@@ -70,6 +72,22 @@ function executePurchaseOrder(id, purchaseQuantity, stockQuantity) {
     function(err, res) {
       if (err) throw err;
       console.log('Your order went through!');
+      // Call showPurchaseCost AFTER order goes through
+      showPurchaseCost(id, purchaseQuantity);
+    }
+  );
+}
+
+function showPurchaseCost(id, quantity) {
+  connection.query(
+    'select price from products where ?',
+    {
+      item_id: id
+    },
+    function(err, res) {
+      if (err) throw err;
+      var total = (res[0].price * quantity).toFixed(2);
+      console.log(`Your total purchase comes to $${total}`);
       connection.end();
     }
   );
@@ -137,6 +155,7 @@ function readProducts() {
   connection.query('SELECT * FROM products', function(err, res) {
     if (err) throw err;
     console.log(res);
+    // Call promptUser AFTER readProducts completes
     promptUser();
   });
 }
