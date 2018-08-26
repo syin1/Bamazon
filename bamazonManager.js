@@ -31,7 +31,17 @@ function showOptions() {
       ]
     })
     .then(function(selected) {
-      console.log(selected.inventoryOption);
-      connection.end();
+      if (selected.inventoryOption === 'View Products for Sale') {
+        viewProducts();
+      }
     });
+}
+
+// list every available item: the item IDs, names, prices, and quantities
+function viewProducts() {
+  connection.query('SELECT * FROM products', function(err, res) {
+    if (err) throw err;
+    console.log(res);
+    connection.end();
+  });
 }
