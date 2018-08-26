@@ -35,6 +35,8 @@ function showOptions() {
         viewProducts();
       } else if (selected.inventoryOption === 'View Low Inventory') {
         viewLowInventory();
+      } else if (selected.inventoryOption === 'Add to Inventory') {
+        pickProduct();
       }
     });
 }
@@ -64,3 +66,38 @@ function viewLowInventory() {
     connection.end();
   });
 }
+
+// let manager pick which product, and in what quantity to add to inventory
+function pickProduct() {
+  connection.query('SELECT * FROM products', function(err, res) {
+    if (err) throw err;
+
+    var products = [];
+    for (var i = 0; i < res.length; i++) {
+      products.push(res[i].product_name);
+    }
+
+    inquirer
+      .prompt([
+        {
+          type: 'list',
+          name: 'productToAdd',
+          message: 'Here is a list of products to add to inventory:',
+          choices: products
+        },
+        {
+          type: 'input',
+          name: 'quantityToAdd',
+          message: 'How many units would you like to add to inventory?'
+        }
+      ])
+      .then(function(selected) {
+        console.log('you picked ' + selected.productToAdd);
+        console.log('you added ' + selected.quantityToAdd);
+        connection.end();
+      });
+  });
+}
+
+// add the desired product to inventory
+function addToInventory() {}
