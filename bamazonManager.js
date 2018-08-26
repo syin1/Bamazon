@@ -33,6 +33,8 @@ function showOptions() {
     .then(function(selected) {
       if (selected.inventoryOption === 'View Products for Sale') {
         viewProducts();
+      } else if (selected.inventoryOption === 'View Low Inventory') {
+        viewLowInventory();
       }
     });
 }
@@ -42,6 +44,23 @@ function viewProducts() {
   connection.query('SELECT * FROM products', function(err, res) {
     if (err) throw err;
     console.log(res);
+    connection.end();
+  });
+}
+
+// list all items with an inventory count lower than five
+function viewLowInventory() {
+  connection.query('SELECT * FROM products where stock_quantity < 5', function(
+    err,
+    res
+  ) {
+    if (err) throw err;
+
+    if (res.length === 0) {
+      console.log('No items with an inventory count lower than five');
+    } else {
+      console.log(res);
+    }
     connection.end();
   });
 }
