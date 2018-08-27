@@ -40,7 +40,7 @@ function promptUser() {
 // check if there are enough quantity in stock for purchase to go through
 function checkQuantity(id, quantity) {
   connection.query(
-    'SELECT stock_quantity FROM products where ?',
+    'SELECT stock_quantity, price FROM products where ?',
     {
       item_id: parseInt(id)
     },
@@ -55,7 +55,8 @@ function checkQuantity(id, quantity) {
         executePurchaseOrder(
           parseInt(id),
           parseInt(quantity),
-          res[0].stock_quantity
+          res[0].stock_quantity,
+          res[0].price
         );
       }
     }
@@ -63,12 +64,15 @@ function checkQuantity(id, quantity) {
 }
 
 // execute customer's purchase order
-function executePurchaseOrder(id, purchaseQuantity, stockQuantity) {
+function executePurchaseOrder(id, purchaseQuantity, stockQuantity, price) {
+  var sales = (price * purchaseQuantity).toFixed(2);
+
   connection.query(
     'update products set ? where ?',
     [
       {
-        stock_quantity: stockQuantity - purchaseQuantity
+        stock_quantity: stockQuantity - purchaseQuantity,
+        product_sales: sales
       },
       {
         item_id: id
@@ -77,23 +81,7 @@ function executePurchaseOrder(id, purchaseQuantity, stockQuantity) {
     function(err, res) {
       if (err) throw err;
       console.log('Your order went through!');
-      // Call showPurchaseCost AFTER order goes through
-      showPurchaseCost(id, purchaseQuantity);
-    }
-  );
-}
-
-// show customers their total purchase cost
-function showPurchaseCost(id, quantity) {
-  connection.query(
-    'select price from products where ?',
-    {
-      item_id: id
-    },
-    function(err, res) {
-      if (err) throw err;
-      var total = (res[0].price * quantity).toFixed(2);
-      console.log(`Your total purchase comes to $${total}`);
+      console.log(`Your total purchase comes to $${sales}`);
       connection.end();
     }
   );
