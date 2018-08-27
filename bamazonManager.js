@@ -37,6 +37,8 @@ function showOptions() {
         viewLowInventory();
       } else if (selected.inventoryOption === 'Add to Inventory') {
         pickProduct();
+      } else if (selected.inventoryOption === 'Add New Product') {
+        addNewProduct();
       }
     });
 }
@@ -115,4 +117,49 @@ function addToInventory(product, quantity) {
       connection.end();
     }
   );
+}
+
+// add new product to inventory
+function addNewProduct() {
+  // prompt for info about the new product to add
+  inquirer
+    .prompt([
+      {
+        name: 'newProduct',
+        type: 'input',
+        message: 'What is the new product you would like to add?'
+      },
+      {
+        name: 'department',
+        type: 'input',
+        message: 'What department does this new product fall under?'
+      },
+      {
+        name: 'price',
+        type: 'input',
+        message: "What's the selling price of this new product?"
+      },
+      {
+        name: 'quantity',
+        type: 'input',
+        message: 'What quantity would you like to add to stock?'
+      }
+    ])
+    .then(function(answer) {
+      // when finished prompting, insert a new item into the db with that info
+      connection.query(
+        'INSERT INTO products SET ?',
+        {
+          product_name: answer.newProduct,
+          department_name: answer.department,
+          price: parseFloat(answer.price),
+          stock_quantity: parseInt(answer.quantity)
+        },
+        function(err) {
+          if (err) throw err;
+          console.log('Your new product was added successfully!');
+        }
+      );
+      connection.end();
+    });
 }
