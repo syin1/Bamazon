@@ -75,8 +75,12 @@ function pickProduct() {
     if (err) throw err;
 
     var products = [];
+    var quantity = [];
+    var id = [];
     for (var i = 0; i < res.length; i++) {
       products.push(res[i].product_name);
+      quantity.push(res[i].stock_quantity);
+      id.push(res[i].item_id);
     }
 
     inquirer
@@ -84,31 +88,42 @@ function pickProduct() {
         {
           type: 'list',
           name: 'productToAdd',
-          message: 'Here is a list of products to add to inventory:',
+          message:
+            'Here is a list of products to add to inventory, please pick one:',
           choices: products
         },
         {
           type: 'input',
           name: 'quantityToAdd',
-          message: 'What would you like the total quantity to be in stock?'
+          message: 'What quantity would you like to add to inventory?'
         }
       ])
       .then(function(selected) {
-        addToInventory(selected.productToAdd, parseInt(selected.quantityToAdd));
+        index = products.indexOf(selected.productToAdd);
+
+        addToInventory(
+          id[index],
+          parseInt(selected.quantityToAdd),
+          quantity[index]
+        );
       });
   });
 }
 
 // add the desired product and quantity to inventory
-function addToInventory(product, quantity) {
+function addToInventory(id, quantityToAdd, existingQuantity) {
+  if (existingQuantity === null) {
+    existingQuantity = 0;
+  }
+
   connection.query(
     'update products set ? where ?',
     [
       {
-        stock_quantity: quantity
+        stock_quantity: existingQuantity + quantityToAdd
       },
       {
-        product_name: product
+        item_id: id
       }
     ],
     function(err, res) {
