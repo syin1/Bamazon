@@ -40,7 +40,7 @@ function promptUser() {
 // check if there are enough quantity in stock for purchase to go through
 function checkQuantity(id, quantity) {
   connection.query(
-    'SELECT stock_quantity, price FROM products where ?',
+    'SELECT stock_quantity, price, product_sales FROM products where ?',
     {
       item_id: parseInt(id)
     },
@@ -56,7 +56,8 @@ function checkQuantity(id, quantity) {
           parseInt(id),
           parseInt(quantity),
           res[0].stock_quantity,
-          res[0].price
+          res[0].price,
+          res[0].product_sales
         );
       }
     }
@@ -64,15 +65,26 @@ function checkQuantity(id, quantity) {
 }
 
 // execute customer's purchase order
-function executePurchaseOrder(id, purchaseQuantity, stockQuantity, price) {
+function executePurchaseOrder(
+  id,
+  purchaseQuantity,
+  stockQuantity,
+  price,
+  productSales
+) {
+  if (productSales === null) {
+    productSales = 0;
+  }
+
   var sales = (price * purchaseQuantity).toFixed(2);
+  var cumulativeTotal = parseFloat(sales) + parseFloat(productSales);
 
   connection.query(
     'update products set ? where ?',
     [
       {
         stock_quantity: stockQuantity - purchaseQuantity,
-        product_sales: sales
+        product_sales: parseFloat(sales) + parseFloat(productSales)
       },
       {
         item_id: id
