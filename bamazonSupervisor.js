@@ -29,20 +29,50 @@ function showMethods() {
       if (selected.supervisorOption === 'View Product Sales by Department') {
         viewProductSales();
       } else if (selected.supervisorOption === 'Create New Department') {
-        console.log('create new department');
-        connection.end();
+        createNewDepartment();
       }
     });
 }
 
+// display product sales, profits by department
 function viewProductSales() {
   connection.query(
     'SELECT department_id, products.department_name, over_head_costs, sum(product_sales) as product_sales, sum(product_sales) - over_head_costs as total_profit FROM products inner join departments on products.department_name=departments.department_name group by department_id, products.department_name, over_head_costs',
     function(err, res) {
       if (err) throw err;
-
       console.table(res);
       connection.end();
     }
   );
+}
+
+// create a new department with the preset overhead cost
+function createNewDepartment() {
+  inquirer
+    .prompt([
+      {
+        type: 'input',
+        name: 'name',
+        message: "What's the name of the new department?"
+      },
+      {
+        type: 'input',
+        name: 'cost',
+        message: "What's the overhead cost?"
+      }
+    ])
+    .then(function(answer) {
+      connection.query(
+        'insert into departments set ?',
+        {
+          department_name: answer.name,
+          over_head_costs: answer.cost
+        },
+        function(err, res) {
+          if (err) throw err;
+          console.log('Successfully created new department!');
+          connection.end();
+        }
+      );
+    });
 }
