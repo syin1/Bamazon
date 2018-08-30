@@ -101,10 +101,13 @@ function executePurchaseOrder(
 
 // displays the product catalogue
 function readProducts() {
-  connection.query('SELECT * FROM products', function(err, res) {
-    if (err) throw err;
-    console.log(res);
-    // Call promptUser AFTER readProducts completes
-    promptUser();
-  });
+  connection.query(
+    'SELECT item_id as ID, product_name as Product, department_name as Department, Price FROM products',
+    function(err, res) {
+      if (err) throw err;
+      console.table(res);
+      // Call promptUser AFTER readProducts completes
+      promptUser();
+    }
+  );
 }

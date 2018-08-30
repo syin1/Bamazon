@@ -45,28 +45,31 @@ function showOptions() {
 
 // list every available item: the item IDs, names, prices, and quantities
 function viewProducts() {
-  connection.query('SELECT * FROM products', function(err, res) {
-    if (err) throw err;
-    console.log(res);
-    connection.end();
-  });
+  connection.query(
+    'SELECT item_id as ID, product_name as Product, department_name as Department, price as Price, stock_quantity as Quantity, product_sales as Sales FROM products',
+    function(err, res) {
+      if (err) throw err;
+      console.table(res);
+      connection.end();
+    }
+  );
 }
 
 // list all items with an inventory count lower than five
 function viewLowInventory() {
-  connection.query('SELECT * FROM products where stock_quantity < 5', function(
-    err,
-    res
-  ) {
-    if (err) throw err;
+  connection.query(
+    'SELECT item_id as ID, product_name as Product, department_name as Department, price as Price, stock_quantity as Quantity, product_sales as Sales FROM products where stock_quantity < 5',
+    function(err, res) {
+      if (err) throw err;
 
-    if (res.length === 0) {
-      console.log('No items with an inventory count lower than five');
-    } else {
-      console.log(res);
+      if (res.length === 0) {
+        console.log('No items with an inventory count lower than five');
+      } else {
+        console.table(res);
+      }
+      connection.end();
     }
-    connection.end();
-  });
+  );
 }
 
 // let manager pick which product, and in what quantity to add to inventory
