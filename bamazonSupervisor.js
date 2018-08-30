@@ -37,7 +37,7 @@ function showMethods() {
 // display product sales, profits by department
 function viewProductSales() {
   connection.query(
-    'SELECT department_id, products.department_name, over_head_costs, sum(product_sales) as product_sales, sum(product_sales) - over_head_costs as total_profit FROM products inner join departments on products.department_name=departments.department_name group by department_id, products.department_name, over_head_costs',
+    'SELECT department_id, departments.department_name, over_head_costs, sum(product_sales) as product_sales, sum(product_sales) - over_head_costs as total_profit FROM products right join departments on products.department_name=departments.department_name group by department_id, products.department_name, over_head_costs',
     function(err, res) {
       if (err) throw err;
       console.table(res);
@@ -71,7 +71,8 @@ function createNewDepartment() {
         function(err, res) {
           if (err) throw err;
           console.log('\nSuccessfully created new department!\n');
-          connection.end();
+          console.log("Here's the updated list:\n");
+          viewProductSales();
         }
       );
     });
