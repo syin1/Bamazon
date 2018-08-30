@@ -48,9 +48,13 @@ function checkQuantity(id, quantity) {
       if (err) throw err;
 
       if (parseInt(quantity) > res[0].stock_quantity) {
+        console.log('');
         console.log('Insufficient quantity!');
+        console.log('');
+        connection.end();
       } else {
-        console.log('Execute purchase order...');
+        console.log('');
+        console.log('Executing purchase order...');
         // Call executePurchaseOrder AFTER checking there's sufficient quantity
         executePurchaseOrder(
           parseInt(id),
@@ -59,6 +63,7 @@ function checkQuantity(id, quantity) {
           res[0].price,
           res[0].product_sales
         );
+        console.log('');
       }
     }
   );
@@ -94,6 +99,7 @@ function executePurchaseOrder(
       if (err) throw err;
       console.log('Your order went through!');
       console.log(`Your total purchase comes to $${sales}`);
+      console.log('');
       connection.end();
     }
   );
@@ -106,6 +112,7 @@ function readProducts() {
     function(err, res) {
       if (err) throw err;
       console.table(res);
+      console.log('');
       // Call promptUser AFTER readProducts completes
       promptUser();
     }

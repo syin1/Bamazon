@@ -27,6 +27,10 @@ However, if your store does have enough of the product, it will fulfill the cust
 
 #### Examples:
 
+![Customer App 01](customer01.png)
+
+![Customer App 02](customer02.png)
+
 ---
 
 ### Manager View
