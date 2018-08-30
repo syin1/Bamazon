@@ -56,6 +56,17 @@ If a manager selects `Add New Product`, it will allow the manager to add a compl
 
 #### Examples:
 
+![Manager App 01](manager01.png)
+
+![Manager App 02](manager02.png)
+
+![Manager App 03](manager03.png)
+
+![Manager App 04a](manager04a.png)
+![Manager App 04b](manager04b.png)
+
+![Manager App 05](manager05.png)
+
 ---
 
 ### Supervisor View
@@ -72,5 +83,11 @@ Running this application will list a set of menu options:
 When a supervisor selects `View Product Sales by Department` the app will display a summarized table in the terminal/bash window, with department ID, department name, over-head costs, product sales and total profits as columns.
 
 #### Examples:
+
+![Supervisor App 01](supervisor01.png)
+
+![Supervisor App 02](supervisor02.png)
+
+![Supervisor App 03](supervisor03.png)
 
 ---

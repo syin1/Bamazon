@@ -131,8 +131,9 @@ function addToInventory(id, quantityToAdd, existingQuantity) {
     ],
     function(err, res) {
       if (err) throw err;
-      console.log('You added the product to inventory');
-      connection.end();
+      console.log('\nYou added the product to inventory\n');
+      console.log('Here is an updated inventory list:\n');
+      viewProducts();
     }
   );
 }
@@ -175,9 +176,10 @@ function addNewProduct() {
         },
         function(err) {
           if (err) throw err;
-          console.log('Your new product was added successfully!');
+          console.log('\nYour new product was added successfully!\n');
+          console.log('Here is an updated inventory list:\n');
+          viewProducts();
         }
       );
-      connection.end();
     });
 }

@@ -70,7 +70,7 @@ function createNewDepartment() {
         },
         function(err, res) {
           if (err) throw err;
-          console.log('Successfully created new department!');
+          console.log('\nSuccessfully created new department!\n');
           connection.end();
         }
       );
