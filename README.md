@@ -1,8 +1,8 @@
 # Bamazon
 
-![Bamazon App](e-commerce.jpg)
-
 ### This is an Amazon-like storefront command line application. The app will take in orders from customers and deplete stock from the store's inventory. It tracks product sales across the store's departments and provides a summary of the highest-grossing departments in the store.
+
+![Bamazon App](e-commerce.jpg)
 
 ### Technology Stack: Node.js, JavaScript, MySQL
 
@@ -27,9 +27,13 @@ However, if your store does have enough of the product, it will fulfill the cust
 
 #### Examples:
 
-![Customer App 01](customer01.png)
+- Buying One iMac Pro
 
-![Customer App 02](customer02.png)
+  ![Customer App 01](customer01.png)
+
+- Not Enough in Stock
+
+  ![Customer App 02](customer02.png)
 
 ---
 
@@ -56,16 +60,26 @@ If a manager selects `Add New Product`, it will allow the manager to add a compl
 
 #### Examples:
 
-![Manager App 01](manager01.png)
+- Menu Options for Managers
 
-![Manager App 02](manager02.png)
+  ![Manager App 01](manager01.png)
 
-![Manager App 03](manager03.png)
+- View Products for Sale
 
-![Manager App 04a](manager04a.png)
-![Manager App 04b](manager04b.png)
+  ![Manager App 02](manager02.png)
 
-![Manager App 05](manager05.png)
+- View Low Inventory (quantity less than 5)
+
+  ![Manager App 03](manager03.png)
+
+- Add to Inventory (6 copies of 'The Intelligent Investor')
+
+  ![Manager App 04a](manager04a.png)
+  ![Manager App 04b](manager04b.png)
+
+- Add New Product (50 A&R Sports Hockey Ball - Pack of 12)
+
+  ![Manager App 05](manager05.png)
 
 ---
 
@@ -84,10 +98,16 @@ When a supervisor selects `View Product Sales by Department` the app will displa
 
 #### Examples:
 
-![Supervisor App 01](supervisor01.png)
+- Menu Options for Supervisors
 
-![Supervisor App 02](supervisor02.png)
+  ![Supervisor App 01](supervisor01.png)
 
-![Supervisor App 03](supervisor03.png)
+- View Product Sales by Department
+
+  ![Supervisor App 02](supervisor02.png)
+
+- Create New Department
+
+  ![Supervisor App 03](supervisor03.png)
 
 ---
